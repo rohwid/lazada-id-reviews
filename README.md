@@ -1,4 +1,4 @@
-# **Machine Learning Project Template**
+# **Lazada ID Reviews**
 
 ![workflow status](https://github.com/rohwid/lazada-id-review/actions/workflows/builder.yml/badge.svg)
 
