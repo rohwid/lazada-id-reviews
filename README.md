@@ -1,6 +1,6 @@
 # **Lazada ID Reviews**
 
-![workflow status](https://github.com/rohwid/lazada-id-review/actions/workflows/builder.yml/badge.svg)
+![workflow status](https://github.com/rohwid/lazada-id-reviews/actions/workflows/builder.yml/badge.svg)
 
 Steps:
 + Select **Use this template** > **Create a new repository**. This menu is in the top right corner of this repository.
