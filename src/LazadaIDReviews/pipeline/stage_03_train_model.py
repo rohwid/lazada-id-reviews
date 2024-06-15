@@ -1,6 +1,6 @@
-from MLProject.config.configuration import ConfigurationManager
-from MLProject.components.training import Training
-from MLProject import logger
+from LazadaIDReviews.config.configuration import ConfigurationManager
+from LazadaIDReviews.components.training import Training
+from LazadaIDReviews import logger
 
 STAGE_NAME = "Training"
 

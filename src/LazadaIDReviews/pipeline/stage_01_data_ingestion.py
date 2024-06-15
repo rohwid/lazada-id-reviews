@@ -1,6 +1,6 @@
-from MLProject import logger
-from MLProject.config.configuration import ConfigurationManager
-from MLProject.components.data_ingestion import DataIngestion
+from LazadaIDReviews import logger
+from LazadaIDReviews.config.configuration import ConfigurationManager
+from LazadaIDReviews.components.data_ingestion import DataIngestion
 
 STAGE_NAME = "Data Ingestion"
 

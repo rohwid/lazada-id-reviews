@@ -1,5 +1,5 @@
-from MLProject import logger
-from MLProject.entity.config_entity import TrainEvaluationConfig
+from LazadaIDReviews import logger
+from LazadaIDReviews.entity.config_entity import TrainEvaluationConfig
 
 class TrainEvaluation:
     def __init__(self, config: TrainEvaluationConfig):

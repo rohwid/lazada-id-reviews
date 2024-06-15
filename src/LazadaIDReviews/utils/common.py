@@ -1,6 +1,6 @@
 from box.exceptions import BoxValueError
 from box import ConfigBox
-from MLProject import logger
+from LazadaIDReviews import logger
 from ensure import ensure_annotations
 from pathlib import Path
 from typing import Any

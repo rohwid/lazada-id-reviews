@@ -1,6 +1,6 @@
-from MLProject.config.configuration import ConfigurationManager
-from MLProject.components.preprocessing import Preprocessing
-from MLProject import logger
+from LazadaIDReviews.config.configuration import ConfigurationManager
+from LazadaIDReviews.components.preprocessing import Preprocessing
+from LazadaIDReviews import logger
 
 STAGE_NAME = "Preprocessing"
 
