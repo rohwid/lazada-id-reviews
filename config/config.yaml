@@ -1,22 +1,38 @@
 artifacts_root: artifacts
 
-data_ingestion:
+ingest_from_sql:
   root_dir: artifacts/data-ingestion
-  input_train_path: "artifacts/preprocessing/X_train.csv"
-  input_test_path: "artifacts/preprocessing/X_test.csv"
+  reviews_table: reviews
+  reviews_path: artifacts/data-ingestion/reviews.csv
+  items_table: items
+  items_path: artifacts/data-ingestion/items.csv
+  category_table: category
+  category_path: artifacts/data-ingestion/category.csv
 
-preprocessing:
+dump_data:
+  root_dir: artifacts/data
+  input_train_path: "artifacts/data/X_train.pkl"
+  input_test_path: "artifacts/data/X_test.pkl"
+  output_train_path: "artifacts/data/y_train.pkl"
+  output_test_path: "artifacts/data/y_test.pkl"
+
+vectorize_data:
   root_dir: artifacts/preprocessing
-  output_train_path: "artifacts/preprocessing/y_train.csv"
-  output_test_path: "artifacts/preprocessing/y_test.csv"
+  vectorized_train_path: "artifacts/preprocessing/X_train_vec.pkl"
+  vectorized_test_path: "artifacts/preprocessing/X_test_vec.pkl"
+  vectorizer_model_path: "artifacts/models/vectorizer.pkl"
 
 train_model:
   root_dir: "artifacts/models"
-  model_path: "artifacts/models/model.pkl"
+  model_path: "artifacts/models/logistic_regression.pkl"
 
-evaluation:
+train_evaluation:
   root_dir: "artifacts/models"
   score_path: metrics/scores.json
-  mlflow_dataset_path: "artifacts/data/ml_eval_result.csv"
-  mlflow_exp_name: "ML Project"
-  mlflow_run_name: "ml-eval"
+  mlflow_dataset_path: "artifacts/data/train_eval_result.csv"
+  mlflow_dataset_column:
+  - "reviewContents"
+  - "ratings"
+  - "predictions"
+  mlflow_exp_name: "Lazada Reviews Classification"
+  mlflow_run_name: "train-eval"
