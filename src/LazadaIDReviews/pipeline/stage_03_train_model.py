@@ -9,10 +9,15 @@ class TrainingPipeline:
         pass
 
     def pipeline(self):
-        config = ConfigurationManager()
-        training_config = config.get_training_config()
-        training = Training(config=training_config)
-        training.model()
+        try:
+            config = ConfigurationManager()
+            training_config = config.get_training_config()
+            training = Training(config=training_config)
+            training.logistic_regression()
+        except Exception as e:
+            logger.error(e)
+            raise e
+        
 if __name__ == '__main__':
     try:
         logger.info(f"\n\n")

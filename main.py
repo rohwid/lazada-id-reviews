@@ -24,7 +24,8 @@ try:
     logger.info(f">>>>>>> Stage {STAGE_NAME} Started <<<<<<< ".upper())
     
     obj = PreprocessingPipeline()
-    obj.pipeline()
+    obj.dump_data_pipeline()
+    obj.preprocessing_pipeline()
     
     logger.info(f">>>>>>> Stage {STAGE_NAME} Completed <<<<<<< ]\n\n".upper())
 except Exception as e:
