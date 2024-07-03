@@ -1,5 +1,6 @@
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
+from imblearn.over_sampling import RandomOverSampler
 from LazadaIDReviews import logger
 from LazadaIDReviews.entity.config_entity import (DataDumpConfig, 
                                                   DataPreprocessingConfig)
@@ -27,12 +28,19 @@ class DumpData:
             test_size=self.config.params_test_size
         )
         
-        logger.info(f"Dump data train into {self.config.input_train_path} directory.")
-        X_train.to_pickle(self.config.input_train_path)
+        # NOTE: improve the performance with ROS
+        logger.info(f"Perform random over sampler.")
+        ros = RandomOverSampler()
+        X_train_ros, y_train_ros = ros.fit_resample(pd.DataFrame(X_train), pd.DataFrame(y_train))
+        
+        # NOTE: data save as series
+        logger.info(f"Dump data train into {self.config.root_dir} directory.")
+        X_train_ros["reviewContent"].to_pickle(self.config.input_train_path)
         X_test.to_pickle(self.config.input_test_path)
         
-        logger.info(f"Dump data test into {self.config.input_test_path} directory.")
-        y_train.to_pickle(self.config.output_train_path)
+        # NOTE: data save as series
+        logger.info(f"Dump data test into {self.config.root_dir} directory.")
+        y_train_ros["rating"].to_pickle(self.config.output_train_path)
         y_test.to_pickle(self.config.output_test_path)
 
 class Preprocessing:
