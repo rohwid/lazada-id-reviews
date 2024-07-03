@@ -36,3 +36,12 @@ train_evaluation:
   - "predictions"
   mlflow_exp_name: "Lazada Reviews Classification"
   mlflow_run_name: "train-eval"
+
+predict:
+  root_dir: "artifacts/predict"
+  mlflow_model_name: "logistic_regression"
+  mlflow_vectorizer_model_path: "vectorizer/vectorizer.pkl"
+
+unit_test:
+  root_dir: "artifacts/test"
+  mlflow_input_example_path: "models/input_example.json"
