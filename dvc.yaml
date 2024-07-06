@@ -8,6 +8,7 @@ stages:
       - artifacts/data-ingestion/category.csv
       - artifacts/data-ingestion/items.csv
       - artifacts/data-ingestion/reviews.csv
+    always_changed: true
 
   preprocessing:
     cmd: python src/LazadaIDReviews/pipeline/stage_02_preprocessing.py

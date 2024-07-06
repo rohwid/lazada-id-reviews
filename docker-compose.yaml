@@ -1,0 +1,16 @@
+services:    
+  app-dev:
+    build: ./
+    container_name: app-dev
+    restart: unless-stopped
+    hostname: app-dev
+    ports:
+      - 8000:8000
+    networks:
+      - app-net
+    env_file:
+      - .env
+
+networks:
+  app-net:
+    driver: bridge
