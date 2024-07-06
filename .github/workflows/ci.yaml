@@ -17,7 +17,7 @@ jobs:
         run: |
           echo "MLFLOW_TRACKING_URI=${{ secrets.MLFLOW_TRACKING_URI }}" >> .env
           echo "MLFLOW_DEPLOY_MODEL_ALIAS=${{ vars.MLFLOW_DEPLOY_MODEL_DEV }}" >> .env
-          echo "APP_ENDPOINT=${{ vars.APP_ENDPOINT_DEV }}" >> .env
+          echo "APP_ENDPOINT=http://localhost:8000/predict" >> .env
 
       - name: Build and Run Container
         run: |
