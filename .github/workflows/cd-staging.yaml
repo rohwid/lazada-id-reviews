@@ -1,0 +1,62 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging Server 🚀
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Execute Deployment Command
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          USERNAME: ${{ secrets.SSH_USERNAME_STG }}
+          APP_PATH_STG: ${{ vars.APP_PATH_STG }}
+          GIT_URL: ${{ vars.GIT_URL }}
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          MLFLOW_DEPLOY_MODEL_ALIAS: ${{ vars.MLFLOW_DEPLOY_MODEL_STG }}
+
+        with:
+          host: ${{ secrets.SSH_HOST_STG }}
+          username: ${{ secrets.SSH_USERNAME_STG }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_STG }}
+          envs: USERNAME, APP_PATH_STG, GIT_URL, MLFLOW_TRACKING_URI, MLFLOW_DEPLOY_MODEL_ALIAS, APP_ENDPOINT
+          script: |
+
+            # Project setup
+            if [[ -d "/home/${USERNAME}/${APP_PATH_STG}" ]]; then 
+              printf "Change directory to /home/${USERNAME}/${APP_PATH_STG}."
+              cd /home/${USERNAME}/${APP_PATH_STG}
+
+              printf "Stop the docker container."
+              sudo docker compose down
+
+              printf "Clean the docker systems."
+              sudo docker system prune -a -f
+
+              printf "Delete the artifacts directory."
+              sudo rm -r artifacts
+
+              printf "Update the repository."
+              git pull --rebase
+            else
+              printf "Clone the project repository."
+              ssh-keyscan github.com > ~/.ssh/known_hosts
+              git clone $GIT_URL /home/${USERNAME}/${APP_PATH_STG}
+              cd /home/${USERNAME}/${APP_PATH_STG}
+            fi
+
+            # If there are any envars update
+            echo "MLFLOW_TRACKING_URI=$MLFLOW_TRACKING_URI" > .env
+            echo "MLFLOW_DEPLOY_MODEL_ALIAS=$MLFLOW_DEPLOY_MODEL_ALIAS" >> .env
+
+            # Run app
+            sudo docker compose up app-stg --build --detach
+      
+      - name: Hit Endpoint
+        run: |
+          sleep 20
+          curl http://${{ secrets.SSH_HOST_STG }}:8000/
