@@ -1,0 +1,7 @@
+[core]
+    remote = storage
+['remote "storage"']
+    url = s3://lazada-id-reviews-dvc-pipeline-bucket
+    endpointurl = http://18.182.40.204:9000
+    access_key_id = mlops_minio_user
+    secret_access_key = mlops_minio_pass

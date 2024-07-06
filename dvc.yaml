@@ -1,0 +1,57 @@
+stages:
+  data_ingestion:
+    cmd: python src/LazadaIDReviews/pipeline/stage_01_data_ingestion.py
+    deps:
+      - src/LazadaIDReviews/pipeline/stage_01_data_ingestion.py
+      - config/config.yaml
+    outs:
+      - artifacts/data-ingestion/category.csv
+      - artifacts/data-ingestion/items.csv
+      - artifacts/data-ingestion/reviews.csv
+
+  preprocessing:
+    cmd: python src/LazadaIDReviews/pipeline/stage_02_preprocessing.py
+    deps:
+      - src/LazadaIDReviews/pipeline/stage_02_preprocessing.py
+      - config/config.yaml
+      - artifacts/data-ingestion/reviews.csv
+    params:
+      - metrics/params.yaml:
+        - TEST_SIZE
+    outs:
+      - artifacts/data/X_train.pkl
+      - artifacts/data/X_test.pkl
+      - artifacts/data/y_train.pkl
+      - artifacts/data/y_test.pkl
+      - artifacts/preprocessing/X_train_vec.pkl
+      - artifacts/preprocessing/X_test_vec.pkl
+      - artifacts/models/vectorizer.pkl
+  
+  training:
+    cmd: python src/LazadaIDReviews/pipeline/stage_03_train_model.py
+    deps:
+      - src/LazadaIDReviews/pipeline/stage_03_train_model.py
+      - config/config.yaml
+      - artifacts/preprocessing/X_train_vec.pkl
+      - artifacts/data/y_train.pkl
+    params:
+      - metrics/params.yaml:
+        - MAX_ITER
+        - SOLVER
+        - N_JOBS
+    outs:
+      - artifacts/models/logistic_regression.pkl
+  
+  evaluation:
+    cmd: python src/LazadaIDReviews/pipeline/stage_04_model_evaluation.py
+    deps:
+      - src/LazadaIDReviews/pipeline/stage_04_model_evaluation.py
+      - config/config.yaml
+      - artifacts/preprocessing/X_train_vec.pkl
+      - artifacts/data/X_train.pkl
+      - artifacts/data/X_test.pkl
+      - artifacts/data/y_train.pkl
+      - artifacts/models/logistic_regression.pkl
+    metrics:
+    - metrics/scores.json:
+        cache: false

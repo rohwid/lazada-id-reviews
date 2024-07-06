@@ -35,7 +35,7 @@ train_evaluation:
   - "ratings"
   - "predictions"
   mlflow_exp_name: "Lazada Reviews Classification"
-  mlflow_run_name: "train-eval"
+  mlflow_run_name: "train-eval-ros-dvc"
 
 predict:
   root_dir: "artifacts/predict"
