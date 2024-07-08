@@ -54,7 +54,7 @@ jobs:
             echo "MLFLOW_DEPLOY_MODEL_ALIAS=$MLFLOW_DEPLOY_MODEL_ALIAS" >> .env
 
             # Run app
-            sudo docker compose up app-stg --build --detach
+            sudo docker compose up app-stg-0 app-stg-1 app-stg-2 --build --detach
       
       - name: Hit Endpoint
         run: |
