@@ -15,7 +15,7 @@ jobs:
       - name: Execute Deployment Command
         uses: appleboy/ssh-action@v1.0.3
         env:
-          USERNAME: ${{ secrets.SSH_USER_NAME_PRD }}
+          USERNAME: ${{ secrets.SSH_USERNAME_PRD }}
           APP_PATH_PRD: ${{ vars.APP_PATH_PRD }}
           GIT_URL: ${{ vars.GIT_URL }}
           MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
@@ -27,7 +27,7 @@ jobs:
 
         with:
           host: ${{ secrets.SSH_HOST_PRD }}
-          username: ${{ secrets.SSH_USER_NAME_PRD }}
+          username: ${{ secrets.SSH_USERNAME_PRD }}
           key: ${{ secrets.SSH_PRIVATE_KEY_PRD }}
           envs: USERNAME, APP_PATH_PRD, GIT_URL, MLFLOW_TRACKING_URI, MLFLOW_DEPLOY_MODEL_ALIAS, DOCKERHUB_USERNAME, DOCKERHUB_TOKEN, APP_NAME, APP_TAG
           script: |
