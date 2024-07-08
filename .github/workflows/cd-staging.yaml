@@ -59,4 +59,4 @@ jobs:
       - name: Hit Endpoint
         run: |
           sleep 20
-          curl http://${{ secrets.SSH_HOST_STG }}:8000/
+          curl ${{ vars.APP_URL_STG }}
