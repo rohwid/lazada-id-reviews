@@ -1,0 +1,71 @@
+name: Deploy Production
+
+on:
+  release:
+    types:
+      - published
+      - edited
+
+jobs:
+  deploy-production:
+    name: Deploy to Production Server 🚀
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Execute Deployment Command
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          USERNAME: ${{ secrets.SSH_USER_NAME_PRD }}
+          APP_PATH_PRD: ${{ vars.APP_PATH_PRD }}
+          GIT_URL: ${{ vars.GIT_URL }}
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          MLFLOW_DEPLOY_MODEL_ALIAS: ${{ vars.MLFLOW_DEPLOY_MODEL_PRD }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          APP_NAME: ${{ vars.APP_NAME }}
+          APP_TAG: ${{ github.event.release.tag_name }}
+
+        with:
+          host: ${{ secrets.SSH_HOST_PRD }}
+          username: ${{ secrets.SSH_USER_NAME_PRD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_PRD }}
+          envs: USERNAME, APP_PATH_PRD, GIT_URL, MLFLOW_TRACKING_URI, MLFLOW_DEPLOY_MODEL_ALIAS, DOCKERHUB_USERNAME, DOCKERHUB_TOKEN, APP_NAME, APP_TAG
+          script: |
+
+            sudo docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
+
+            # Project setup
+            if [[ -d "/home/${USERNAME}/${APP_PATH_PRD}" ]]; then 
+              printf "Change directory to /home/${USERNAME}/${APP_PATH_PRD}."
+              cd /home/${USERNAME}/$APP_PATH_PRD
+
+              printf "Stop the docker container."
+              sudo docker compose down
+
+              printf "Clean the docker systems."
+              sudo docker system prune -a -f
+
+              printf "Delete the artifacts directory."
+              sudo rm -r artifacts
+
+              printf "Update the repository."
+              git pull --rebase
+            else
+              ssh-keyscan github.com > ~/.ssh/known_hosts
+              git clone $GIT_URL /home/${USERNAME}/$APP_PATH_PRD
+              cd /home/${USERNAME}/$APP_PATH_PRD
+            fi
+
+            # If there are any envars update
+            echo "MLFLOW_TRACKING_URI=$MLFLOW_TRACKING_URI" > .env
+            echo "MLFLOW_DEPLOY_MODEL_ALIAS=$MLFLOW_DEPLOY_MODEL_ALIAS" >> .env
+            echo "APP_IMAGE=${DOCKERHUB_USERNAME}/${APP_NAME}" >> .env
+            echo "APP_TAG=$APP_TAG" >> .env
+
+            # Run app
+            sudo docker compose up app-prd --build --detach
+
+      - name: Hit Endpoint
+        run: |
+          sleep 20
+          curl http://${{ secrets.SSH_HOST_PRD }}:8000/

@@ -23,6 +23,18 @@ services:
     env_file:
       - .env
 
+  app-prd:
+    image: ${APP_IMAGE}:${APP_TAG}
+    container_name: app-prd
+    restart: unless-stopped
+    hostname: app-prd
+    ports:
+      - 8000:8000
+    networks:
+      - app-net
+    env_file:
+      - .env
+
 networks:
   app-net:
     driver: bridge
