@@ -63,7 +63,7 @@ jobs:
             echo "APP_TAG=$APP_TAG" >> .env
 
             # Run app
-            sudo docker compose up app-prd --build --detach
+            sudo docker compose up app-prd-0 app-prd-1 app-prd-2 --build --detach
 
       - name: Hit Endpoint
         run: |

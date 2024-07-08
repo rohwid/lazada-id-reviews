@@ -11,11 +11,11 @@ services:
     env_file:
       - .env
 
-  app-stg:
+  app-stg-0:
     build: ./
-    container_name: app-stg
+    container_name: app-stg-0
     restart: unless-stopped
-    hostname: app-stg
+    hostname: app-stg-0
     ports:
       - 8000:8000
     networks:
@@ -23,13 +23,61 @@ services:
     env_file:
       - .env
 
-  app-prd:
-    image: ${APP_IMAGE}:${APP_TAG}
-    container_name: app-prd
+  app-stg-1:
+    build: ./
+    container_name: app-stg-1
     restart: unless-stopped
-    hostname: app-prd
+    hostname: app-stg-1
+    ports:
+      - 8001:8000
+    networks:
+      - app-net
+    env_file:
+      - .env
+
+  app-stg-2:
+    build: ./
+    container_name: app-stg-2
+    restart: unless-stopped
+    hostname: app-stg-2
+    ports:
+      - 8002:8000
+    networks:
+      - app-net
+    env_file:
+      - .env
+
+  app-prd-0:
+    image: ${APP_IMAGE}:${APP_TAG}
+    container_name: app-prd-0
+    restart: unless-stopped
+    hostname: app-prd-0
     ports:
       - 8000:8000
+    networks:
+      - app-net
+    env_file:
+      - .env
+
+  app-prd-1:
+    image: ${APP_IMAGE}:${APP_TAG}
+    container_name: app-prd-1
+    restart: unless-stopped
+    hostname: app-prd-1
+    ports:
+      - 8001:8000
+    networks:
+      - app-net
+    env_file:
+      - .env
+
+  app-prd-2:
+    image: ${APP_IMAGE}:${APP_TAG}
+    container_name: app-prd-2
+    restart: unless-stopped
+    hostname: app-prd-2
+    ports:
+      - 8002:8000
     networks:
       - app-net
     env_file:
